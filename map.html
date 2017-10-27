@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OpenLayers Tutorial - Place a Marker</title>
+    <script src="http://openlayers.org/api/OpenLayers.js"></script>
+    <script type="text/javascript">
+        var map, baseLayer, markers;
+        function init(){
+            map = new OpenLayers.Map('map');            
+            baseLayer = new OpenLayers.Layer.WMS("OpenLayers VMAP0", "http://labs.metacarta.com/wms/vmap0", {layers:"basic"});
+            map.addLayer(baseLayer);
+            map.setCenter(new OpenLayers.LonLat(-98, 39),3); 
+   	    markers = new OpenLayers.Layer.Markers("Cities");   			
+            map.addLayer(markers);            
+        }
+ 
+        function jumpTo()
+        {
+            markers.clearMarkers();        	
+            var selectBox = document.getElementById('jumpTo');        		
+   	    if (selectBox.value == "NA") return;
+   	    var parse = selectBox.value.split(',');
+   	    var location = new OpenLayers.LonLat(parse[0],parse[1]); 			
+   	    var size = new OpenLayers.Size(21,25);
+            var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+            var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png',size,offset);   
+            markers.addMarker(new OpenLayers.Marker(location,icon.clone()));               			 
+          }
+    </script>
+ 
+    <style>
+    @media screen
+    {
+        #map{width: 500px; height:300px; border: 2px solid black;}
+    }
+    </style>
+  </head>
+  <body onload="init()">
+    <h1>OpenLayers Tutorial - Place a Marker</h1>
+    <div id="map"></div>
+    <br />
+    <label>Place a marker at this city: </label>
+    <select id="jumpTo" onchange="jumpTo();">
+        <option value="NA">=== Select a City ===</option>
+    	<option value="-84.42,33.65">Atlanta</option>
+    	<option value="-104.87,39.75">Denver</option>  
+    	<option value="-95.35,29.97">Houston</option>
+    	<option value="-81.32,28.43">Orlando</option> 
+    	<option value="-121.50,38.52">Sacramento</option>
+    	<option value="-95.62,39.07">Topeka</option> 
+    </select>
+  </body>
+</html>
